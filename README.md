@@ -7,7 +7,7 @@ Camilo Canedo
 Jaider Ardila  
 
 ## Links del proyecto  
-- Archivo de proyecto: *https://www.mediafire.com/file/mlfp35l69fsfn77/ProyectoBlazor.rar/file*  
+
 - Videos: *https://drive.google.com/drive/folders/1iDqVw7_ffaOCZmgo9ER7spunwYVlBOw-?usp=drive_link*  
 
 # Informe del Proyecto – Sistema de Notas en Blazor
