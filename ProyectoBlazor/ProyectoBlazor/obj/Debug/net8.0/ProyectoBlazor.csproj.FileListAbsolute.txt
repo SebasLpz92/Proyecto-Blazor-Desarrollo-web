@@ -1,0 +1,6 @@
+C:\Users\sebas\OneDrive\Desktop\Proyecto Web\ProyectoBlazor\ProyectoBlazor\obj\Debug\net8.0\ProyectoBlazor.csproj.AssemblyReference.cache
+C:\Users\sebas\OneDrive\Desktop\Proyecto Web\ProyectoBlazor\ProyectoBlazor\obj\Debug\net8.0\ProyectoBlazor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sebas\OneDrive\Desktop\Proyecto Web\ProyectoBlazor\ProyectoBlazor\obj\Debug\net8.0\ProyectoBlazor.AssemblyInfoInputs.cache
+C:\Users\sebas\OneDrive\Desktop\Proyecto Web\ProyectoBlazor\ProyectoBlazor\obj\Debug\net8.0\ProyectoBlazor.AssemblyInfo.cs
+C:\Users\sebas\OneDrive\Desktop\Proyecto Web\ProyectoBlazor\ProyectoBlazor\obj\Debug\net8.0\ProyectoBlazor.csproj.CoreCompileInputs.cache
+C:\Users\sebas\OneDrive\Desktop\Proyecto Web\ProyectoBlazor\ProyectoBlazor\obj\Debug\net8.0\ProyectoBlazor.MvcApplicationPartsAssemblyInfo.cache

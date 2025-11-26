@@ -1,0 +1,44 @@
+﻿@page "/login"
+@inject ProyectoBlazor.Services.StudentState StudentState
+@inject NavigationManager NavigationManager
+
+<div class="login-wrapper">
+  <div class="login-hero card">
+    <h2>Bienvenido</h2>
+    <p>Ingresa tu nombre para ver tus notas. Esto es un inicio rápido — luego añadiremos autenticación real.</p>
+    <ul class="muted">
+      <li>Pestañas para navegar entre Notas / Cursos / Perfil</li>
+      <li>Mock de datos para probar UI</li>
+      <li>Luego conectamos con BD y Auth</li>
+    </ul>
+  </div>
+
+  <div class="login-box card">
+    <label><strong>Nombre del estudiante</strong></label>
+    <input class="input" @bind="name" placeholder="Ej. Juan Pérez" />
+    <div class="row" style="justify-content:space-between;margin-top:.5rem">
+      <button class="btn" @onclick="DoLogin">Entrar</button>
+      <button class="btn secondary" @onclick="DemoLogin">Usar demo</button>
+    </div>
+  </div>
+</div>
+
+@code {
+    private string name = "";
+
+    void DoLogin()
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return;
+        }
+        StudentState.Login(name);
+        NavigationManager.NavigateTo("/notes");
+    }
+
+    void DemoLogin()
+    {
+        StudentState.Login("demo student");
+        NavigationManager.NavigateTo("/notes");
+    }
+}

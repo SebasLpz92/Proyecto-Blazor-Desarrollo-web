@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+@inject ProyectoBlazor.Services.StudentState StudentState
+@inject NavigationManager NavigationManager
+
+<link href="css/site.css" rel="stylesheet" />
+
+<div class="app-container">
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">U</div>
+      <div>
+        <h1>Notas Univ</h1>
+        <div class="muted" style="font-size:.85rem">Sistema de pruebas</div>
+      </div>
+    </div>
+    <div class="row">
+            @if (!string.IsNullOrEmpty(StudentState.StudentName))
+            {
+            <div class="muted">Hola, <strong>@StudentState.StudentName</strong></div>
+            <button class="btn secondary" @onclick="Logout">Cerrar sesión</button>
+            }
+    </div>
+  </header>
+
+  <main class="page-grid">
+        @Body
+  </main>
+</div>
+
+@code {
+    void Logout()
+    {
+        StudentState.Logout();
+        NavigationManager.NavigateTo("/login");
+    }
+}

@@ -1,0 +1,121 @@
+﻿@page "/notes"
+@inject ProyectoBlazor.Services.StudentState StudentState
+@inject NavigationManager NavigationManager
+
+@if (StudentState.StudentName is null) {
+  <div class="card">
+    <p>No hay sesión iniciada. <Component /></p>
+  </div>
+} else {
+  <div class="card" style="padding:1rem 1.25rem">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <h2 style="margin:0">Tus notas</h2>
+        <div class="muted">Estudiante: <strong>@StudentState.StudentName</strong></div>
+      </div>
+      <div class="muted">Promedio general: <strong>@OverallAverage</strong></div>
+    </div>
+
+    <div style="margin-top:.75rem">
+      <div class="tabs">
+        <div class="tab @(activeTab==Tab.Courses? "active":"")" @onclick="()=>SelectTab(Tab.Courses)">Cursos</div>
+        <div class="tab @(activeTab==Tab.Grades? "active":"")" @onclick="()=>SelectTab(Tab.Grades)">Notas</div>
+        <div class="tab @(activeTab==Tab.Profile? "active":"")" @onclick="()=>SelectTab(Tab.Profile)">Perfil</div>
+      </div>
+
+      @if (activeTab==Tab.Courses) {
+        <div class="notes-grid" style="margin-top:.5rem">
+          @foreach(var c in Courses){
+            <div class="card note">
+              <h4>@c.Name <small class="muted">(@c.Code)</small></h4>
+              <div class="meta">@GetCourseAverage(c.Id) pts (promedio)</div>
+              <div class="row" style="margin-top:.5rem">
+                <button class="btn" @onclick="()=>SelectCourse(c.Id)">Ver notas</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+      else if (activeTab==Tab.Grades) {
+        @if (selectedCourseId == Guid.Empty) {
+          <p class="muted">Selecciona un curso en "Cursos" o elige uno abajo.</p>
+          <div class="notes-grid" style="margin-top:.5rem">
+            @foreach(var c in Courses){
+              <div class="card note">
+                <h4>@c.Name <small class="muted">(@c.Code)</small></h4>
+                <div class="meta">@GetCourseAverage(c.Id) pts</div>
+                <div class="row" style="margin-top:.5rem">
+                  <button class="btn" @onclick="()=>SelectCourse(c.Id)">Ver notas</button>
+                </div>
+              </div>
+            }
+          </div>
+        } else {
+          <div style="margin-top:.5rem">
+            <button class="btn secondary" @onclick="()=>selectedCourseId=Guid.Empty">Volver a cursos</button>
+            <h3 style="margin-top:.75rem">@Courses.First(c=>c.Id==selectedCourseId).Name</h3>
+            <div class="notes-grid" style="margin-top:.75rem">
+              @foreach(var g in CurrentGrades) {
+                <div class="card note">
+                  <h4>@g.Type</h4>
+                  <div class="meta">@g.Date.ToShortDateString()</div>
+                  <div class="value">@g.Value</div>
+                  @if(!string.IsNullOrEmpty(g.Notes)) {
+                    <div class="muted" style="margin-top:.5rem">@g.Notes</div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+      else if (activeTab==Tab.Profile) {
+        <div style="padding:1rem">
+          <p><strong>Nombre:</strong> @StudentState.StudentName</p>
+          <p class="muted">Aquí podrás cambiar tu perfil y más tarde añadir foto, correo y configurar notificaciones.</p>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@code {
+  enum Tab { Courses, Grades, Profile }
+  Tab activeTab = Tab.Courses;
+  Guid selectedCourseId = Guid.Empty;
+  List<Course> Courses = new();
+  List<Grade> CurrentGrades = new();
+
+  protected override void OnInitialized() {
+    var data = StudentState.GetDataForCurrent();
+    Courses = data.courses;
+  }
+
+  void SelectTab(Tab t){
+    activeTab = t;
+    if (t!=Tab.Grades) selectedCourseId = Guid.Empty;
+  }
+
+  void SelectCourse(Guid courseId){
+    selectedCourseId = courseId;
+    var data = StudentState.GetDataForCurrent();
+    if (data.grades.TryGetValue(courseId, out var grades)) CurrentGrades = grades;
+    else CurrentGrades = new List<Grade>();
+    activeTab = Tab.Grades;
+  }
+
+  decimal GetCourseAverage(Guid courseId){
+    var data = StudentState.GetDataForCurrent();
+    if (!data.grades.TryGetValue(courseId, out var list) || list.Count==0) return 0;
+    return Math.Round(list.Average(g=>g.Value),2);
+  }
+
+  string OverallAverage {
+    get {
+      var data = StudentState.GetDataForCurrent();
+      var all = data.grades.SelectMany(kv => kv.Value).ToList();
+      if (all.Count==0) return "N/A";
+      return Math.Round(all.Average(g=>g.Value),2).ToString();
+    }
+  }
+}
